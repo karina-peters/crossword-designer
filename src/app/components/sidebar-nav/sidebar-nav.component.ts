@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChildren } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
 import { Router } from "@angular/router";
 
@@ -13,50 +13,45 @@ import { PuzzleMetadata } from "src/app/models/puzzle.model";
   styleUrls: ["./sidebar-nav.component.scss"],
 })
 export class SidebarNavComponent implements OnInit {
-  @ViewChildren("pageLink") pageLinks!: QueryList<ElementRef>;
-  @ViewChildren("userButton") userButtons!: QueryList<ElementRef>;
-
   public puzzleLoaded: boolean = false;
   public pages: Array<any> = [];
   public buttons: Array<any> = [];
-
-  private routes: Array<string> = ["/load", "/answers", "/puzzle", "/clues", "/review", "/stats"];
 
   constructor(private router: Router, private authService: AuthService, private loadService: LoadService) {
     this.pages = [
       {
         index: 0,
-        route: this.routes[0],
+        route: "/load",
         title: "Load or Create Puzzle",
         icon: "house",
       },
       {
         index: 1,
-        route: this.routes[1],
+        route: "/answers",
         title: "Brainstorm Answers",
         icon: "notebook",
       },
       {
         index: 2,
-        route: this.routes[2],
+        route: "/puzzle",
         title: "Edit Puzzle",
         icon: `grid-empty`,
       },
       {
         index: 3,
-        route: this.routes[3],
+        route: "/clues",
         title: "Edit Clues",
         icon: "numbered-list",
       },
       {
         index: 4,
-        route: this.routes[4],
+        route: "/review",
         title: "Review Puzzle",
         icon: "clipboard-check",
       },
       {
         index: 5,
-        route: this.routes[5],
+        route: "/stats",
         title: "View Puzzle Statistics",
         icon: "bar-chart",
       },
@@ -79,7 +74,7 @@ export class SidebarNavComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.router.navigateByUrl(this.routes[0]);
+    this.router.navigateByUrl(this.pages[0].route);
 
     this.loadService.activePuzzle$.subscribe((metadata: PuzzleMetadata) => {
       this.puzzleLoaded = metadata?.id ? true : false;

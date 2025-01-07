@@ -71,12 +71,19 @@ export class GridComponent implements OnInit {
         this.onClickSquare(square.index);
       }
     } else if (event.key == "Backspace" && square.type == SquareType.Letter) {
-      this.puzzleService.setSquareValue(square.index, " ");
-      this.selectPrevSquare(square.index);
+      if (square.value == " ") {
+        this.selectPrevSquare(square.index);
+        this.puzzleGrid[this.selectedIndex].value = " ";
+      } else {
+        this.puzzleService.setSquareValue(square.index, " ");
+      }
     } else if (this.isAlphaChar(event.key) && square.type == SquareType.Letter) {
       this.puzzleService.setSquareValue(square.index, event.key);
       this.selectNextSquare(square.index);
     }
+
+    // Prevent duplicate events when grid is in focus
+    event.stopPropagation();
   }
 
   public getPuzzleRow(index: number): Array<Square> {
